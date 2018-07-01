@@ -167,12 +167,16 @@ OVPN_ROUTES=()
 OVPN_SERVER=192.168.255.0/24
 OVPN_SERVER_URL=''
 OVPN_TLS_CIPHER=''
+EASY_RSA_PASSFILE=0
+
+pass_config_local='/etc/openvpn/gen_passwd'
+
 
 # Import existing configuration if present
 [ -r "$OVPN_ENV" ] && source "$OVPN_ENV"
 
 # Parse arguments
-while getopts ":a:e:E:C:T:r:s:du:bcp:n:k:DNm:f:tz2" opt; do
+while getopts ":a:e:E:C:T:r:s:du:bcp:n:k:DNm:f:tz2:F" opt; do
     case $opt in
         a)
             OVPN_AUTH="$OPTARG"
@@ -407,6 +411,10 @@ fi
 if diff -q "${bak:-}" "$conf" 2>/dev/null; then
     echo "Removing duplicate back-up: $bak"
     rm -fv "$bak"
+fi
+
+if [ "$EASY_RSA_PASSFILE" == "1" ];then
+   date | sha512sum | cut -d ' ' -f 1 > $pass_config_local
 fi
 
 echo "Successfully generated config"
