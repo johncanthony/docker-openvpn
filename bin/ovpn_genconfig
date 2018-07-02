@@ -257,6 +257,9 @@ while getopts ":a:e:E:C:T:r:s:du:bcp:n:k:DNm:f:tz2:F" opt; do
         f)
             OVPN_FRAGMENT="$OPTARG"
             ;;
+	F)
+	    EASY_RSA_PASSFILE=0
+	    ;; 
         \?)
             set +x
             echo "Invalid option: -$OPTARG" >&2
